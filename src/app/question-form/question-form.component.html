@@ -1,0 +1,75 @@
+<div>
+    <div class="question-data">
+    <form>
+        <div style="margin-top: 12px;" *ngFor="let question of questions" >
+          <label style="margin-bottom: 4px; font-weight: bold;">{{ question.prompt }}</label><br>
+          <ng-container [ngSwitch]="question.type">
+            <textarea *ngSwitchCase="'paragraph'" type="text" [(ngModel)]="question.answer" name="answer" rows="5" style="width: 100%;" ></textarea>
+            <div class = "checkboxes" *ngSwitchCase="'checkbox'">
+              <div *ngFor="let option of question.options;let j=index" style="margin-top: 7px;">
+                <input type="checkbox" [(ngModel)]="option.selected" name="option_{{j}}"> <label>{{ option.label }} </label>
+              </div>
+              <input *ngIf="question.hasOtherOption" type="checkbox" name="hasOtherOption" [(ngModel)]="question.otherAnswer"> <label *ngIf="question.hasOtherOption">Others </label>
+            </div>
+          </ng-container>
+        </div>
+    </form> 
+    
+    <a class= "add-question" href="javascript:void(0);" (click)="addQuestion()">Add New Question</a> <br>
+    <button  class="btn btn-success" style="float:right;" *ngIf = "questions!.length > 0" (click) = "updateQuestions()" >Review Answers</button>
+    </div>
+
+<!-- Modal for adding a new question -->
+<ng-template #addQuestionModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Question</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('cancel')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #myForm="ngForm">
+      <div class="form-group">
+        <label for="question-prompt">Question Label</label>
+        <input type="text" class="form-control" id="question-prompt" required [(ngModel)]="newQuestion.prompt" name="prompt" #prompt="ngModel">
+        <div *ngIf="prompt.invalid && (prompt.dirty || prompt.touched)" class="add-question-error">
+          <div *ngIf="prompt.errors?.['required']">
+            Question label is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="question-type">Type</label>
+        <select class="form-control" id="question-type" [(ngModel)]="newQuestion.type" name="type">
+          <option value="paragraph">Paragraph</option>
+          <option value="checkbox">Checkbox List</option>
+        </select>
+      </div>
+      <div *ngIf="newQuestion.type === 'checkbox'" class="form-group">
+        <label>Options</label>
+        <div style="margin-top: 12px;" *ngFor="let option of newQuestion.options;let j = index">
+          <input type="text" [(ngModel)]="option.label" style="width:75%" name="option_{{j}}" #ngModel="ngModel" required>
+          <button (click)="removeOption(option)" class= "btn btn-danger" style="width:22%;margin-left: 11px;">Remove</button>
+          <div *ngIf="ngModel.invalid && (ngModel.dirty || ngModel.touched)" class="add-question-error">
+            <div *ngIf="ngModel.errors?.['required']">
+              Option is required
+            </div>
+          </div>
+        </div>
+        <div class= "add-question-error" *ngIf="optionValidation">
+          Please add atleast one option
+        </div>
+        <button (click)="addOption()" class="addOption btn btn-primary">Add Option</button>
+      </div>
+      <div *ngIf="newQuestion.type === 'checkbox'" class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="has-other-option" style="margin-top: 20px;" [(ngModel)]="newQuestion.hasOtherOption" name="hasOtherOption">
+        <label class="form-check-label" for="has-other-option">Other</label>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="myForm.form.markAllAsTouched();saveQuestionData(myForm);">Save</button>
+  </div>
+</ng-template>
+
+</div>

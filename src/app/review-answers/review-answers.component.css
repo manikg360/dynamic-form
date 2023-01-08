@@ -1,0 +1,29 @@
+.form-group label {
+    margin-bottom: 12px;
+    margin-top: 16px;
+}
+.addOption {
+    margin-top: 6px;
+    display: block;
+}
+.add-question-error {
+    margin-top: 9px;
+    margin-left: 7px;
+    color: #ff0000;
+    font-size: 14px;
+}
+
+.question-data {
+    width: 50%;
+    margin: 5% 0px 0px 20%;
+    padding: 30px 20px 32px 0px;
+    padding: 20 40 50 70;
+    padding-left: 20px;
+    border: 1px solid;
+    max-height: 900px;
+    overflow-y: auto;
+}
+  
+  .checkboxes label{
+    margin: 6px 36px 13px 8px;
+  }

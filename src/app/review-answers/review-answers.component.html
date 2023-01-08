@@ -1,0 +1,14 @@
+<div class="question-data">
+    <div style="margin-top: 12px;" *ngFor="let question of questions" >
+        <label style="margin-bottom: 4px; font-weight: bold;">{{ question.prompt }}</label><br>
+        <ng-container [ngSwitch]="question.type">
+            <p *ngSwitchCase="'paragraph'" style="width: 100%;" >{{question.answer}}</p>
+            <div class = "checkboxes" *ngSwitchCase="'checkbox'">
+              <div *ngFor="let option of question.options" style="margin-top: 7px;">
+                <p *ngIf="option.selected"> {{ option.label }} </p>
+              </div>
+              <p *ngIf="question.otherAnswer" >Others</p>
+            </div>
+        </ng-container>
+    </div>
+</div>
